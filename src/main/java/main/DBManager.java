@@ -14,13 +14,8 @@ public abstract class DBManager {
     private static String SENHA = "root";
     private static String URL = "jdbc:mysql://localhost:3306/mydb";
     private static Scanner scanner;
-    static void connectTest() {
-		 try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA)) {
-		     System.out.println("Database connected!");
-		 } catch (SQLException e) {
-		     System.out.println("Conexão com o banco falhou!");
-         }
-   }
+ 
+   
 	//Abaixo fica os métodos de manipulação do banco SQL:
 	protected static void exibirSeries() {
         try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA);

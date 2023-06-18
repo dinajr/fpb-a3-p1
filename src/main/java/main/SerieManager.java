@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.Connection;
+import javax.swing.*;
 import main.DBManager;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,21 +14,27 @@ import java.util.Scanner;
 		
 		
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+		//Scanner scanner = new Scanner(System.in);
 		//Verifica a conexão.
 		DBManager.connectTest();
         String opcao;
         //Menu de opções;
         do {
-            System.out.println("===== MENU =====");
-            System.out.println("1. Exibir séries");
-            System.out.println("2. Adicionar série");
-            System.out.println("3. Editar série");
-            System.out.println("4. Excluir série");
-            System.out.println("0. Sair");
-            System.out.print("Escolha uma opção: ");
-            opcao = scanner.nextLine();
-
+        	opcao = JOptionPane.showInputDialog(null, "<html>===== MENU =====<br>"
+        			+ "1. Exibir séries<br>"
+        			+ "2. Adicionar série<br>"
+        			+ "3. Editar série<br>"
+        			+"4. Excluir série<br>"
+        			+"0. Sair");
+            //System.out.println("===== MENU =====");
+            //System.out.println("1. Exibir séries");
+            //System.out.println("2. Adicionar série");
+            //System.out.println("3. Editar série");
+            //System.out.println("4. Excluir série");
+            //System.out.println("0. Sair");
+            //System.out.print("Escolha uma opção: ");
+            //opcao = scanner.nextLine();
+        	
             switch (opcao) {
                 case "1":
                     DBManager.exibirSeries();
@@ -42,15 +49,15 @@ import java.util.Scanner;
                     DBManager.excluirSerie();
                     break;
                 case "0":
-                    System.out.println("Encerrando o programa...");
+                   JOptionPane.showMessageDialog(null, "Encerrando o programa...");
                     break;
                 default:
-                    System.out.println("Opção inválida!");
+                	JOptionPane.showMessageDialog(null, "Opção inválida!");
                     break;
             }
         } while (!opcao.equals("0"));
 
-        scanner.close();
+        
     }
 
     

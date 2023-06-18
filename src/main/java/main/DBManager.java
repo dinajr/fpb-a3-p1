@@ -1,5 +1,6 @@
 package main;
 import main.DBPreview;
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,21 +27,22 @@ public abstract class DBManager {
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM series")) {
 
-            System.out.println("===== SÉRIES =====");
+            String exibir = "<html>===== SÉRIES =====<br>";
             while (resultSet.next()) {
-                long id = resultSet.getInt("idseries");
+                long id = resultSet.getLong("idseries");
                 String nome = resultSet.getString("nome");
                 int temporadas = resultSet.getInt("temporadas");
                 int anoLancamento = resultSet.getInt("anolancamento");
                 String plataforma = resultSet.getString("streamingplat");
 
-                System.out.println("ID: " + id);
-                System.out.println("Nome: " + nome);
-                System.out.println("Temporadas: " + temporadas);
-                System.out.println("Ano de Lançamento: " + anoLancamento);
-                System.out.println("Plataforma: " + plataforma);
-                System.out.println("------------------------------");
+                exibir += "ID: " + id + "<br>";
+                exibir += "Nome: " + nome + "<br>";
+                exibir += "Temporadas: " + temporadas + "<br>";
+                exibir += "Ano de Lançamento: " + anoLancamento + "<br>";
+                exibir += "Plataforma: " + plataforma + "<br>";
+                exibir += "------------------------------" + "<br>";
             }
+            JOptionPane.showMessageDialog(null, exibir);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,23 +53,21 @@ public abstract class DBManager {
 	             PreparedStatement preparedStatement = connection.prepareStatement(
 	                     "UPDATE series SET nome = ?, temporadas = ?, anolancamento = ?, streamingplat = ? WHERE idseries = ?")) {
 
-	            Scanner scanner = new Scanner(System.in);
+	          
 
-	            System.out.print("Digite o ID da série que deseja editar: ");
-	            long id = scanner.nextLong();
-	            scanner.nextLine(); 
+	            long id = Long.parseLong(JOptionPane.showInputDialog("Digite o ID da série que deseja editar: ")); 
 	            DBPreview editPreview = new DBPreview();
-	            System.out.print("Digite o novo nome da série: ");
-	            String nome = scanner.nextLine(); editPreview.setNome(nome);
+	            String nome = JOptionPane.showInputDialog("Digite o novo nome da série: ");
+	            editPreview.setNome(nome);
 
-	            System.out.print("Digite o novo número de temporadas: ");
-	            int temporadas = scanner.nextInt(); editPreview.setTemporadas(temporadas);
-
-	            System.out.print("Digite o novo ano de lançamento: ");
-	            int anoLancamento = scanner.nextInt(); editPreview.setAnoLancamento(anoLancamento);
-	            scanner.nextLine(); 
-	            System.out.print("Digite a nova plataforma de streaming: ");
-	            String plataforma = scanner.nextLine(); editPreview.setPlataforma(plataforma);
+	            int temporadas = Integer.parseInt(JOptionPane.showInputDialog("Digite o novo número de temporadas: "));
+	            editPreview.setTemporadas(temporadas);
+	            	
+	           int anoLancamento = Integer.parseInt(JOptionPane.showInputDialog("Digite o novo ano de lançamento: "));
+	           editPreview.setAnoLancamento(anoLancamento);
+	           
+	           String plataforma = JOptionPane.showInputDialog("Digite a nova plataforma de streaming: ");
+	           editPreview.setPlataforma(plataforma);
 
 	            preparedStatement.setString(1, nome);
 	            preparedStatement.setInt(2, temporadas);
@@ -78,14 +78,14 @@ public abstract class DBManager {
 	            if (confirmation) {
 	            int linhasAfetadas = preparedStatement.executeUpdate();
 	            if (linhasAfetadas > 0) {
-	                System.out.println("Série atualizada com sucesso!");
+	                JOptionPane.showMessageDialog(null, "Série atualizada com sucesso!");
 	            } else {
-	                System.out.println("Falha ao atualizar série. Verifique o ID informado.");
+	                JOptionPane.showMessageDialog(null, "Falha ao atualizar série. Verifique o ID informado.");
 	            }
 	            }
 	            else {
 	            	preparedStatement.cancel();
-	            	System.out.println("Mudança cancelada!");
+	            	JOptionPane.showMessageDialog(null, "Mudança cancelada!");
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -97,20 +97,20 @@ public abstract class DBManager {
 	             PreparedStatement preparedStatement = connection.prepareStatement(
 	                     "INSERT INTO series (nome, temporadas, anolancamento, streamingplat) VALUES (?, ?, ?, ?)")) {
 
-	            scanner = new Scanner(System.in);
+	           
 	            DBPreview addPreview = new DBPreview();
-	            System.out.print("Digite o nome da série: ");
-	            String nome = scanner.nextLine(); addPreview.setNome(nome);
+	            String nome = JOptionPane.showInputDialog("Digite o nome da série: ");
+	            addPreview.setNome(nome);
 
-	            System.out.print("Digite o número de temporadas: ");
-	            int temporadas = scanner.nextInt(); addPreview.setTemporadas(temporadas);
+	            int temporadas = Integer.parseInt(JOptionPane.showInputDialog("Digite o número de temporadas: "));
+	            addPreview.setTemporadas(temporadas);
 
-	            System.out.print("Digite o ano de lançamento: ");
-	            int anoLancamento = scanner.nextInt(); addPreview.setAnoLancamento(anoLancamento);
-	            scanner.nextLine(); 
+	            int anoLancamento = Integer.parseInt(JOptionPane.showInputDialog("Digite o ano de lançamento: "));
+	            addPreview.setAnoLancamento(anoLancamento);
+	             
 
-	            System.out.print("Digite a plataforma de streaming: ");
-	            String plataforma = scanner.nextLine(); addPreview.setPlataforma(plataforma);
+	            String plataforma =  JOptionPane.showInputDialog("Digite a plataforma de streaming: ");
+	            addPreview.setPlataforma(plataforma);
 
 	            preparedStatement.setString(1, nome);
 	            preparedStatement.setInt(2, temporadas);
@@ -120,14 +120,14 @@ public abstract class DBManager {
 	            if (confirmation) {
 	            int linhasAfetadas = preparedStatement.executeUpdate();
 	            	if (linhasAfetadas > 0) {
-	            		System.out.println("Série adicionada com sucesso!");
+	            		JOptionPane.showMessageDialog(null, "Série adicionada com sucesso!");
 	            	} else {
 	            		System.out.println("Falha ao adicionar série.");
 	            	}
 	            }
 	            else {
 	            	preparedStatement.cancel();
-	            	System.out.println("Adição cancelada!");
+	            	JOptionPane.showMessageDialog(null, "Adição cancelada!");
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -138,18 +138,17 @@ public abstract class DBManager {
 	             PreparedStatement preparedStatement = connection.prepareStatement(
 	                     "DELETE FROM series WHERE idseries = ?")) {
 
-	            Scanner scanner = new Scanner(System.in);
 
-	            System.out.print("Digite o ID da série que deseja excluir: ");
-	            int id = scanner.nextInt();
+	            long id = Long.parseLong(JOptionPane.showInputDialog("Digite o ID da série que deseja excluir: "));
+	            scanner.nextLong();
 
-	            preparedStatement.setInt(1, id);
+	            preparedStatement.setLong(1, id);
 
 	            int linhasAfetadas = preparedStatement.executeUpdate();
 	            if (linhasAfetadas > 0) {
-	                System.out.println("Série excluída com sucesso!");
+	            	JOptionPane.showMessageDialog(null, "Série excluída com sucesso!");
 	            } else {
-	                System.out.println("Falha ao excluir série. Verifique o ID informado.");
+	            	JOptionPane.showMessageDialog(null, "Falha ao excluir série. Verifique o ID informado.");
 	            }
 
 	        } catch (SQLException e) {
